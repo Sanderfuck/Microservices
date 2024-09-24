@@ -19,7 +19,6 @@
         <module>amqp</module>
         <module>clients</module>
         <module>apigw</module>
-        <module>apigw</module>
     </modules>
 
     <properties>
