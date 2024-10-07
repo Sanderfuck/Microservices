@@ -1,3 +1,4 @@
+version: '3.0'
 services:
   postgres:
     container_name: postgres_microservices
@@ -32,14 +33,6 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
-    networks:
-      - spring
-  rabbitmq:
-    image: rabbitmq:3.9.11-management-alpine
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
     networks:
       - spring
 

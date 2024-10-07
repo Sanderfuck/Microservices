@@ -1,6 +1,6 @@
 package com.sander.microservices.notification.controller;
 
-import com.sander.microservices.notification.model.NotificationRequest;
+import com.sander.microservices.clients.notification.NotificationRequest;
 import com.sander.microservices.notification.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

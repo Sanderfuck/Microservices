@@ -1,7 +1,0 @@
-com\sander\microservices\blacklist\model\BlacklistCheckHistory$BlacklistCheckHistoryBuilder.class
-com\sander\microservices\blacklist\repository\BlacklistCheckHistoryRepository.class
-com\sander\microservices\blacklist\model\BlacklistCheckHistory.class
-com\sander\microservices\blacklist\service\BlacklistCheckHistoryService.class
-com\sander\microservices\blacklist\controller\BlacklistController.class
-com\sander\microservices\blacklist\model\BlacklistCheckResponse.class
-com\sander\microservices\blacklist\BlackListApplication.class

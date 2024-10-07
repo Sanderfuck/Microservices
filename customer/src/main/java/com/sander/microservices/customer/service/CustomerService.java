@@ -1,25 +1,23 @@
 package com.sander.microservices.customer.service;
 
-import com.sander.microservices.amqp.RabbitMQMessageProducer;
+import com.sander.microservices.clients.blacklist.BlackListCheckResponse;
 import com.sander.microservices.clients.blacklist.BlackListClient;
-import com.sander.microservices.clients.notifiction.NotificationClient;
+import com.sander.microservices.clients.message.MessageRequest;
+import com.sander.microservices.clients.notification.NotificationRequest;
 import com.sander.microservices.customer.exception.CustomerNotFoundException;
 import com.sander.microservices.customer.model.Customer;
-import com.sander.microservices.clients.notifiction.NotificationRequest;
 import com.sander.microservices.customer.repository.CustomerRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import com.sander.microservices.clients.blacklist.BlackListCheckResponse;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
-    private final RabbitMQMessageProducer rabbitMQMessageProducer;
     private final BlackListClient blackListClient;
-    private final NotificationClient notificationClient;
+    private final KafkaTemplate<String, Object> myltiTypeKafkaTemplate;
 
     public void registerCustomer(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
@@ -27,10 +25,6 @@ public class CustomerService {
     }
 
     public boolean checkBlackListUser(Long customerId) {
-//        BlacklistCheckResponse checkResponse = restTemplate.getForObject(
-//            "http://BLACKLIST/api/v1/blacklist-check/{customerId}",
-//            BlacklistCheckResponse.class,
-//            customer.getId());
 
         BlackListCheckResponse checkResponse = blackListClient.isBlackListed(customerId);
 
@@ -40,15 +34,19 @@ public class CustomerService {
 
         NotificationRequest notificationRequest = new NotificationRequest(
             customerId,
-            "Welcome to service "
+            "Welcome to Ukraine - suka"
         );
-//        notificationClient.sendNotification(notificationRequest);
+        MessageRequest messageRequest = new MessageRequest(
+            "Message request",
+            LocalDateTime.now().toString()
+        );
 
-        rabbitMQMessageProducer.publish(
-            notificationRequest,
-            "internal.exchange",
-            "internal.notification.routing-key"
-        );
+        myltiTypeKafkaTemplate.send("sander", 0, "string", "Customer sent string notification by kafka");
+
+        myltiTypeKafkaTemplate.send("sander", 1, "notification", notificationRequest);
+
+        myltiTypeKafkaTemplate.send("sander", 2, "multi", messageRequest);
+
         return false;
     }
 }
