@@ -27,11 +27,6 @@ public class CustomerService {
     }
 
     public boolean checkBlackListUser(Long customerId) {
-//        BlacklistCheckResponse checkResponse = restTemplate.getForObject(
-//            "http://BLACKLIST/api/v1/blacklist-check/{customerId}",
-//            BlacklistCheckResponse.class,
-//            customer.getId());
-
         BlackListCheckResponse checkResponse = blackListClient.isBlackListed(customerId);
 
         if (checkResponse.isBlackListed()) {
@@ -42,7 +37,6 @@ public class CustomerService {
             customerId,
             "Welcome to service "
         );
-//        notificationClient.sendNotification(notificationRequest);
 
         rabbitMQMessageProducer.publish(
             notificationRequest,
